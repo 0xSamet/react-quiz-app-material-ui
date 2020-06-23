@@ -1,5 +1,6 @@
 {
   "name": "react-quiz-example",
+  "homepage": "https://react-quiz-app-material.netlify.app/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
