@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { changeMenuIndex, changeTitle } from "../store/menu";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
+import { Redirect } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,15 +29,18 @@ const Profile = () => {
   const [user, setUser] = useState({
     name: "",
     mail: "",
-    password: "",
   });
   const [nameError, setNameError] = useState("");
   const [mailError, setMailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
+
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const currentUser = useSelector((state) => state.auth.user);
 
   useEffect(() => {
     dispatch(changeMenuIndex(0));
     dispatch(changeTitle("Profilim"));
+    setUser({ name: currentUser.name, mail: currentUser.mail });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -54,19 +58,12 @@ const Profile = () => {
       setMailError("");
       point++;
     }
-    if (user.password.length === 0) {
-      setPasswordError("Şifre Boş Bırakılamaz");
-    } else {
-      setPasswordError("");
-      point++;
-    }
-    return point === 3 ? true : false;
+    return point === 2 ? true : false;
   };
 
   const handleInputChange = (e) => {
     setNameError("");
     setMailError("");
-    setPasswordError("");
     setUser({ ...user, [e.target.name]: e.target.value });
   };
 
@@ -75,7 +72,7 @@ const Profile = () => {
     if (checkInputs()) console.log(user);
   };
 
-  return (
+  return isAuthenticated ? (
     <Grid container justify="center">
       <Grid item s={12} md={8}>
         <form onSubmit={handleSubmit}>
@@ -93,6 +90,7 @@ const Profile = () => {
             fullWidth
             className={classes.formElement}
             onChange={handleInputChange}
+            disabled
           />
           <TextField
             value={user.mail}
@@ -105,20 +103,9 @@ const Profile = () => {
             fullWidth
             className={classes.formElement}
             onChange={handleInputChange}
+            disabled
           />
-          <TextField
-            value={user.password}
-            error={passwordError !== ""}
-            helperText={passwordError}
-            name="password"
-            type="password"
-            label="Şifre"
-            variant="outlined"
-            fullWidth
-            className={classes.formElement}
-            onChange={handleInputChange}
-          />
-          <Button
+          {/*DAHA SONRA YAPILACAK // <Button
             type="submit"
             variant="contained"
             color="primary"
@@ -126,10 +113,12 @@ const Profile = () => {
             fullWidth
           >
             Güncelle
-          </Button>
+          </Button>*/}
         </form>
       </Grid>
     </Grid>
+  ) : (
+    <Redirect to="/girisyap" />
   );
 };
 

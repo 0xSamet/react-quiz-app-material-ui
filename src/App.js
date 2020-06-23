@@ -26,9 +26,11 @@ import Quizzes from "./pages/Quizzes";
 import NotFound from "./pages/NotFound";
 import QuizPage from "./pages/QuizPage";
 import Profile from "./pages/Profile";
+import CreateQuiz from "./pages/CreateQuiz";
 import MyDrawer from "./components/MyDrawer";
 import { toggleMobileDrawer } from "./store/menu";
 import LinearProgress from "@material-ui/core/LinearProgress";
+import axios from "axios";
 
 const drawerWidth = 240;
 
@@ -73,20 +75,32 @@ const useStyles = makeStyles((theme) => {
     title: {
       flexGrow: 1,
     },
+    progressBar: {
+      height: 5,
+    },
   };
 });
 
 const App = () => {
   const classes = useStyles();
-  let location = useLocation();
-  let history = useHistory();
   const darkMode = useSelector((state) => state.darkTheme);
   const menuTitle = useSelector((state) => state.menu.title);
   const mobileDrawer = useSelector((state) => state.menu.mobileDrawer);
-  const registerİsFetching = useSelector((state) => state.register.isFetching);
-  const loginİsFetching = useSelector((state) => state.auth.isFetching);
+  const registerIsFetching = useSelector((state) => state.register.isFetching);
+  const loginIsFetching = useSelector((state) => state.auth.isFetching);
+  const quizPageIsFetching = useSelector((state) => state.quizzes.isFetching);
 
   const dispatch = useDispatch();
+
+  /*useEffect(() => {
+    axios
+      .get(process.env.REACT_APP_API_BASE_URL, {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => console.log(res));
+  }, []);*/
 
   const lightTheme = createMuiTheme({
     palette: {
@@ -115,26 +129,6 @@ const App = () => {
   const handleDrawerToggle = () => {
     dispatch(toggleMobileDrawer());
   };
-
-  useEffect(() => {
-    switch (location.pathname) {
-      case "/girisyap":
-        history.push("/girisyap");
-        break;
-      case "/kayitol":
-        history.push("/kayitol");
-        break;
-      case "/":
-        history.push("/");
-        break;
-      case "/testbul":
-        history.push("/testbul");
-        break;
-      default:
-        return undefined;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <ThemeProvider theme={theme}>
@@ -188,14 +182,20 @@ const App = () => {
         </nav>
         <Paper elevation={0} square className={classes.wrapper}>
           <div className={classes.toolbar} />
-          {registerİsFetching || loginİsFetching ? <LinearProgress /> : null}
+          <div className={classes.progressBar}>
+            {registerIsFetching || loginIsFetching || quizPageIsFetching ? (
+              <LinearProgress color="primary" />
+            ) : null}
+          </div>
+
           <div className={classes.content}>
             <RouterSwitch>
               <Route exact path="/" component={HomePage} />
               <Route exact path="/profil" component={Profile} />
               <Route exact path="/girisyap" component={Login} />
               <Route exact path="/kayitol" component={Register} />
-              <Route exact path="/testbul" component={Quizzes} />
+              <Route exact path="/testler" component={Quizzes} />
+              <Route exact path="/testler/olustur" component={CreateQuiz} />
               <Route exact path="/test/:testId" component={QuizPage} />
               <Route path="*" component={NotFound} />
             </RouterSwitch>

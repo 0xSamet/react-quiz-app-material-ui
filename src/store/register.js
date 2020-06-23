@@ -6,7 +6,7 @@ const INITIAL_STATE = {
   registerSuccess: "",
 };
 
-const registerStart = () => ({
+export const registerStart = () => ({
   type: "REGISTER_START",
 });
 

@@ -9,8 +9,10 @@ import Divider from "@material-ui/core/Divider";
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+
 import { toggleMobileDrawer } from "../store/menu";
 import { changeTheme } from "../store/theme";
+import { logout } from "../store/auth";
 
 import HomeIcon from "@material-ui/icons/Home";
 import QuestionAnswerIcon from "@material-ui/icons/QuestionAnswer";
@@ -19,6 +21,8 @@ import MoodBadIcon from "@material-ui/icons/MoodBad";
 import EmojiPeopleIcon from "@material-ui/icons/EmojiPeople";
 import AccessibilityNewIcon from "@material-ui/icons/AccessibilityNew";
 import FaceIcon from "@material-ui/icons/Face";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import AddCircleIcon from "@material-ui/icons/AddCircle";
 
 const drawerWidth = 240;
 
@@ -85,16 +89,24 @@ const MyDrawer = () => {
       <Divider />
       <List>
         {isAuthenticated ? (
-          <ListItem
-            button
-            onClick={() => handleListItemClick("/profil")}
-            selected={menuIndex === 0}
-          >
-            <ListItemIcon>
-              <FaceIcon />
-            </ListItemIcon>
-            <ListItemText primary={"Profilim"} />
-          </ListItem>
+          <>
+            <ListItem
+              button
+              onClick={() => handleListItemClick("/profil")}
+              selected={menuIndex === 0}
+            >
+              <ListItemIcon>
+                <FaceIcon />
+              </ListItemIcon>
+              <ListItemText primary={"Profilim"} />
+            </ListItem>
+            <ListItem button onClick={() => dispatch(logout())}>
+              <ListItemIcon>
+                <ExitToAppIcon />
+              </ListItemIcon>
+              <ListItemText primary={"Çıkış Yap"} />
+            </ListItem>
+          </>
         ) : (
           <>
             <ListItem
@@ -134,7 +146,7 @@ const MyDrawer = () => {
         </ListItem>
         <ListItem
           button
-          onClick={() => handleListItemClick("/testbul")}
+          onClick={() => handleListItemClick("/testler")}
           selected={menuIndex === 4}
         >
           <ListItemIcon>
@@ -142,6 +154,18 @@ const MyDrawer = () => {
           </ListItemIcon>
           <ListItemText primary={"Test Bul"} />
         </ListItem>
+        {isAuthenticated ? (
+          <ListItem
+            button
+            onClick={() => handleListItemClick("/testler/olustur")}
+            selected={menuIndex === 5}
+          >
+            <ListItemIcon>
+              <AddCircleIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Test Oluştur"} />
+          </ListItem>
+        ) : null}
       </List>
       <Divider />
       <List>

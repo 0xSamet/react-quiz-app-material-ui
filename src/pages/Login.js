@@ -9,7 +9,11 @@ import { changeMenuIndex, changeTitle } from "../store/menu";
 import Button from "@material-ui/core/Button";
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
+
 import { login, loginFailure } from "../store/auth";
+
+import { Redirect, useHistory } from "react-router-dom";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,6 +33,7 @@ const useStyles = makeStyles((theme) => ({
 const Login = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  let history = useHistory();
   const [user, setUser] = useState({
     mail: "",
     password: "",
@@ -36,9 +41,7 @@ const Login = () => {
   const [eMailError, setEMailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const requestErrorMessage = useSelector((state) => state.auth.loginError);
-  /*const requestSuccessMessage = useSelector(
-    (state) => state.register.registerSuccess
-  );*/
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   useEffect(() => {
     dispatch(changeMenuIndex(1));
@@ -76,7 +79,9 @@ const Login = () => {
     }
   };
 
-  return (
+  return isAuthenticated ? (
+    <Redirect to="/profil" />
+  ) : (
     <>
       <Grid container justify="center">
         <Grid item s={12} md={8}>
@@ -125,7 +130,7 @@ const Login = () => {
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
         open={requestErrorMessage !== ""}
         onClose={() => dispatch(loginFailure(""))}
-        autoHideDuration={5000}
+        autoHideDuration={2000}
       >
         <Alert variant="filled" severity="error">
           {requestErrorMessage}

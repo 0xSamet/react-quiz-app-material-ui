@@ -11,6 +11,7 @@ import Button from "@material-ui/core/Button";
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
 import { register, registerFailure, registerSuccess } from "../store/register";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -158,7 +159,7 @@ const Register = () => {
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
         open={requestSuccessMessage !== ""}
         onClose={() => dispatch(registerSuccess(""))}
-        autoHideDuration={5000}
+        autoHideDuration={2000}
       >
         <Alert variant="filled" severity="success">
           {requestSuccessMessage}

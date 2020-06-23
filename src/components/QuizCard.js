@@ -32,14 +32,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const QuizCard = ({ quiz: { author, description, createdAt } }) => {
-
+const QuizCard = ({ id, author, description, createdAt }) => {
   const classes = useStyles();
   let history = useHistory();
 
   const buttonClickHandler = () => {
-    history.push("/test/1");
-  }
+    history.push(`/test/${id}`);
+  };
 
   return (
     <Card>
@@ -50,7 +49,7 @@ const QuizCard = ({ quiz: { author, description, createdAt } }) => {
           </Avatar>
         }
         title={author}
-        subheader={createdAt}
+        subheader={createdAt.split(",")[0]}
       />
 
       <CardContent>
@@ -59,7 +58,9 @@ const QuizCard = ({ quiz: { author, description, createdAt } }) => {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <Button size="small" onClick={buttonClickHandler}>Testi Çöz</Button>
+        <Button size="small" onClick={buttonClickHandler}>
+          Testi Çöz
+        </Button>
       </CardActions>
     </Card>
   );

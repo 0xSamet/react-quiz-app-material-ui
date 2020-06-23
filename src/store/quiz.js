@@ -1,38 +1,59 @@
-const INITIAL_STATE = [
-  {
-    id: 0,
-    author: "Samet Atasever",
-    description: "HTML Testi Açıklaması",
-    createdAt: "11 Haziran 2020",
+import axios from "axios";
+
+const INITIAL_STATE = {
+  isFetching: false,
+  errorMessage: "",
+  quizzes: [],
+};
+
+export const fetchStart = () => ({
+  type: "FETCH_START",
+});
+
+export const fetchSuccess = (quizzes) => ({
+  type: "FETCH_SUCCESS",
+  payload: {
+    quizzes,
   },
-  {
-    id: 1,
-    author: "Kemal Güneş",
-    description: "Javascript Testi Açıklaması",
-    createdAt: "10 Haziran 2020",
-  },
-  {
-    id: 2,
-    author: "Rasim Kaya",
-    description: "React Testi Açıklaması",
-    createdAt: "8 Haziran 2019",
-  },
-  {
-    id: 3,
-    author: "İbrahim Beyaz",
-    description: "Angular Testi Açıklaması",
-    createdAt: "15 Haziran 2017",
-  },
-];
+});
+
+export const fetchFailure = () => ({
+  type: "FETCH_FAILURE",
+});
+
+export const fetch = (query = "") => async (dispatch) => {
+  dispatch(fetchStart());
+  try {
+    const result = await axios.get(
+      `${process.env.REACT_APP_API_BASE_URL}/testler`,
+      {
+        params: {
+          q: query,
+        },
+      }
+    );
+    if (result.status === 200) {
+      dispatch(fetchSuccess(result.data));
+    }
+    //console.log(result);
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 export const quizzesReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case "FILTER_QUIZZES":
-      return state.quizzes.filter((quiz) => {
-        return quiz.description
-          .toLowerCase()
-          .includes(action.payload.query.toLowerCase());
-      });
+    case "FETCH_START":
+      return { ...state, isFetching: true, quizzes: [] };
+    case "FETCH_SUCCESS":
+      return { ...state, isFetching: false, quizzes: action.payload.quizzes };
+    case "FETCH_FAILURE":
+      return {
+        ...state,
+        isFetching: false,
+        quizzes: [],
+        errorMessage: action.payload.errorMessage,
+      };
     default:
       return state;
   }
