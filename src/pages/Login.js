@@ -40,6 +40,7 @@ const Login = () => {
   const [passwordError, setPasswordError] = useState("");
   const requestErrorMessage = useSelector((state) => state.auth.loginError);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const isFetching = useSelector((state) => state.auth.isFetching);
 
   useEffect(() => {
     dispatch(changeMenuIndex(1));
@@ -118,6 +119,7 @@ const Login = () => {
               color="primary"
               className={classes.formElement}
               fullWidth
+              disabled={isFetching}
             >
               Giriş Yap
             </Button>
