@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from "react";
+import React, { useMemo } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
@@ -12,12 +12,7 @@ import {
   createMuiTheme,
   ThemeProvider,
 } from "@material-ui/core/styles";
-import {
-  Switch as RouterSwitch,
-  Route,
-  useLocation,
-  useHistory,
-} from "react-router-dom";
+import { Switch as RouterSwitch, Route } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import HomePage from "./pages/HomePage";
 import Login from "./pages/Login";
@@ -30,7 +25,6 @@ import CreateQuiz from "./pages/CreateQuiz";
 import MyDrawer from "./components/MyDrawer";
 import { toggleMobileDrawer } from "./store/menu";
 import LinearProgress from "@material-ui/core/LinearProgress";
-import axios from "axios";
 
 const drawerWidth = 240;
 

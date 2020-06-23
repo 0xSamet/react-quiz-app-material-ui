@@ -11,7 +11,6 @@ import Button from "@material-ui/core/Button";
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
 import { register, registerFailure, registerSuccess } from "../store/register";
-import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   root: {

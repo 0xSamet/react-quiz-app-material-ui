@@ -12,8 +12,7 @@ import Alert from "@material-ui/lab/Alert";
 
 import { login, loginFailure } from "../store/auth";
 
-import { Redirect, useHistory } from "react-router-dom";
-import axios from "axios";
+import { Redirect } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,7 +32,6 @@ const useStyles = makeStyles((theme) => ({
 const Login = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  let history = useHistory();
   const [user, setUser] = useState({
     mail: "",
     password: "",

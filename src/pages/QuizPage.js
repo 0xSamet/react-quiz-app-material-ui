@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
   },
   answersWrapper: {
     marginTop: theme.spacing(1),
-    marginBottom: 15,
+    marginBottom: 16,
   },
   answerSuccess: {
     marginTop: theme.spacing(2),
@@ -82,17 +82,12 @@ const QuizPage = () => {
     const currentQuiz = store.getState().quizzes.quizzes.find((quiz) => {
       return quiz._id === testId;
     });
-    //console.log(quiz);
     setQuiz({ ...quiz, ...currentQuiz });
-    //dispatch(changeTitle(currentQuiz.description));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const makeAnswer = (index) => {
-    console.log(quiz);
-    //console.log("step", quiz.step, "questions length", quiz.questions.length);
-
     if (index === quiz.questions[quiz.step].answerIndex) {
-      console.log("bildin");
       setQuiz({
         ...quiz,
         isAnswered: true,
@@ -100,7 +95,6 @@ const QuizPage = () => {
         score: quiz.score + 1,
       });
     } else {
-      console.log("bilemedin");
       setQuiz({ ...quiz, isAnswered: true, answeredWith: index });
     }
   };
@@ -145,12 +139,17 @@ const QuizPage = () => {
                   answer={answer.description}
                   className={
                     quiz.isAnswered
-                      ? answer.index === quiz.answeredWith
+                      ? answer.index === quiz.questions[quiz.step].answerIndex
                         ? classes.answerSuccess
+                        : quiz.answeredWith ===
+                          quiz.questions[quiz.step].answerIndex
+                        ? classes.answer
                         : classes.answerError
                       : classes.answer
                   }
-                  onClick={() => makeAnswer(answer.index)}
+                  onClick={() =>
+                    !quiz.isAnswered ? makeAnswer(answer.index) : null
+                  }
                   key={key}
                 />
               ))}
@@ -166,7 +165,9 @@ const QuizPage = () => {
                     fullWidth
                     onClick={nextQuestion}
                   >
-                    Sonraki Soruya Geç
+                    {quiz.step === quiz.questions.length - 1
+                      ? "Testi Bitir"
+                      : "Sonraki Soruya Geç"}
                   </Button>
                 </Box>
               </>
