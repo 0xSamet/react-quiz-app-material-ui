@@ -13,14 +13,9 @@ const rootReducer = combineReducers({
   quizzes: quizzesReducer,
   menu: menuReducer,
 });
+//window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 
-let store = createStore(
-  rootReducer,
-  compose(
-    applyMiddleware(ReduxThunk),
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-  )
-);
+let store = createStore(rootReducer, compose(applyMiddleware(ReduxThunk)));
 
 //store.subscribe(() => console.log(store.getState()));
 
