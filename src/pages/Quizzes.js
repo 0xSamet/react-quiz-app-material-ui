@@ -63,7 +63,7 @@ const Quizzes = () => {
           <Grid item xs={12} md={6} key={quiz._id}>
             <QuizCard
               id={quiz._id}
-              author={quiz.author}
+              author={quiz.author.name}
               description={quiz.description}
               createdAt={quiz.createdAt}
             />

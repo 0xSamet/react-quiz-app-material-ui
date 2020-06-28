@@ -5,3 +5,8 @@ body {
   /*fdfdfd*/
   /*757575*/
 }
+
+a {
+  color: inherit;
+  text-decoration: none;
+}

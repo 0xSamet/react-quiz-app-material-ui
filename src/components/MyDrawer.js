@@ -15,7 +15,7 @@ import { changeTheme } from "../store/theme";
 import { logout } from "../store/auth";
 
 import HomeIcon from "@material-ui/icons/Home";
-import QuestionAnswerIcon from "@material-ui/icons/QuestionAnswer";
+import SearchIcon from "@material-ui/icons/Search";
 import MoodIcon from "@material-ui/icons/Mood";
 import MoodBadIcon from "@material-ui/icons/MoodBad";
 import EmojiPeopleIcon from "@material-ui/icons/EmojiPeople";
@@ -150,7 +150,7 @@ const MyDrawer = () => {
           selected={menuIndex === 4}
         >
           <ListItemIcon>
-            <QuestionAnswerIcon />
+            <SearchIcon />
           </ListItemIcon>
           <ListItemText primary={"Test Bul"} />
         </ListItem>
