@@ -15,7 +15,18 @@ import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 
+import FormControl from "@material-ui/core/FormControl";
+import Input from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import IconButton from "@material-ui/core/IconButton";
+import DeleteIcon from "@material-ui/icons/Delete";
+
+import Pagination from "@material-ui/lab/Pagination";
+
 import produce from "immer";
+
+import Joi from "@hapi/joi";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,18 +59,32 @@ const useStyles = makeStyles((theme) => ({
   button: {
     marginBottom: theme.spacing(1),
   },
+  pageButtonWrapper: {
+    marginBottom: theme.spacing(2),
+    display: "flex",
+    justifyContent: "center",
+  },
 }));
 
-/*
-ÖRNEK POST REQUEST
-{
-    "author": "sAMET a",
-    "description": "test bu kardeşim" ,
-    "questions": [{
-        "description": "soru 1",
-        "answerIndex": 1
-    }]
-}*/
+const quizSchema = Joi.object({
+  description: Joi.string().trim().required(),
+  questions: Joi.array()
+    .items(
+      Joi.object({
+        description: Joi.string().trim().required(),
+        answers: Joi.array()
+          .items(
+            Joi.object({
+              index: Joi.number().required(),
+              description: Joi.string().trim().required(),
+            })
+          )
+          .unique("index"),
+        answerIndex: Joi.number().required(),
+      })
+    )
+    .required(),
+});
 
 const CreateQuiz = () => {
   const classes = useStyles();
@@ -81,31 +106,32 @@ const CreateQuiz = () => {
 
   const quizDefault = {
     description: "",
-    questions: [],
+    questions: [questionDefault],
   };
 
   const statusDefault = {
     isQuizNameSubmitted: false,
     step: 0,
     choiceNumber: 0,
+    page: 0,
   };
 
   const [quiz, setQuiz] = useState(quizDefault);
-  const [question, setQuestion] = useState(questionDefault);
+  //const [question, setQuestion] = useState(questionDefault);
   const [status, setStatus] = useState(statusDefault);
 
-  const handleInput = (e) => {
+  const handleQuizDescriptionInput = (e) => {
     setQuiz({
       ...quiz,
-      [e.target.name]: e.target.value,
+      description: e.target.value,
     });
   };
 
   const handleAnswerInput = (index, value) => {
-    setQuestion(
-      produce(question, (draft) => {
-        draft.answers[index].description = value;
-        draft.descriptionErrorMessage = "";
+    setQuiz(
+      produce(quiz, (draft) => {
+        draft.questions[status.page].answers[index].description = value;
+        draft.questions[status.page].descriptionErrorMessage = "";
       })
     );
   };
@@ -119,63 +145,117 @@ const CreateQuiz = () => {
   };
 
   const addChoice = () => {
-    setQuestion({
-      ...question,
-      answers: [
-        ...question.answers,
-        {
-          index: question.answers.slice(-1)[0].index + 1,
+    setQuiz(
+      produce(quiz, (draft) => {
+        draft.questions[status.page].answers.push({
+          index: draft.questions[status.page].answers.slice(-1)[0].index + 1,
           description: "",
           errorMessage: "",
-        },
-      ],
-    });
+        });
+      })
+    );
+  };
+
+  const deleteChoice = (index) => {
+    setQuiz(
+      produce(quiz, (draft) => {
+        const indexOfChoice = draft.questions[status.page].answers.findIndex(
+          (answer) => {
+            return answer.index === index;
+          }
+        );
+        draft.questions[status.page].answers.splice(indexOfChoice, 1);
+        if (quiz.questions[status.page].answerIndex === index) {
+          draft.questions[status.page].answerIndex =
+            draft.questions[status.page].answerIndex - 1;
+        }
+      })
+    );
   };
 
   const addQuestion = () => {
-    if (isValidQuestion()) {
-      console.log(question);
-      /*setQuiz({
-        ...quiz,
-        questions: [...quiz.questions, question],
-      });
-      setQuestion(questionDefault);*/
+    if (checkFields()) {
+      setQuiz(
+        produce(quiz, (draft) => {
+          draft.questions.push(questionDefault);
+        })
+      );
+      setStatus(
+        produce(status, (draft) => {
+          draft.page = quiz.questions.length;
+        })
+      );
     }
   };
 
-  const isValidQuestion = () => {
-    if (question.description === "") {
-      setQuestion({
-        ...question,
-        descriptionErrorMessage: "Soruyu Boş Bırakmayınız !",
+  const checkFields = () => {
+    let changeQuestionStateTo = { ...quiz };
+    let point = 0;
+
+    if (changeQuestionStateTo.questions[status.page].description === "") {
+      changeQuestionStateTo = produce(changeQuestionStateTo, (draft) => {
+        draft.questions[status.page].descriptionErrorMessage =
+          "Soruyu Doldurunuz !";
       });
-      return false;
+    } else {
+      changeQuestionStateTo = produce(changeQuestionStateTo, (draft) => {
+        draft.questions[status.page].descriptionErrorMessage = "";
+      });
+
+      point++;
     }
-    for (let i = 0; i < question.answers.length; i++) {
-      if (question.answers[i].description === "") {
-        console.log("boş var");
-        setQuestion(
-          produce(question, (draft) => {
-            draft.answers[i].errorMessage = "Doldur";
-          })
-        );
-        return false;
-      } else {
-        setQuestion(
-          produce(question, (draft) => {
-            draft.answers[i].errorMessage = "";
-          })
-        );
-        return false;
+
+    if (
+      changeQuestionStateTo.questions[status.page].descriptionErrorMessage ===
+      ""
+    ) {
+      for (
+        let i = 0;
+        i < changeQuestionStateTo.questions[status.page].answers.length;
+        i++
+      ) {
+        if (
+          changeQuestionStateTo.questions[status.page].answers[i]
+            .description === ""
+        ) {
+          changeQuestionStateTo = produce(changeQuestionStateTo, (draft) => {
+            draft.questions[status.page].answers[i].errorMessage =
+              "Doldurunuz !";
+          });
+        } else {
+          changeQuestionStateTo = produce(changeQuestionStateTo, (draft) => {
+            draft.questions[status.page].answers[i].errorMessage = "";
+          });
+          point++;
+        }
       }
     }
-    //return true;
+
+    setQuiz(changeQuestionStateTo);
+
+    return setTimeout(() => {
+      return point ===
+        changeQuestionStateTo.questions[status.page].answers.length + 1
+        ? true
+        : false;
+    }, 2000);
   };
 
   const submitQuiz = () => {
-    if (isValidQuestion()) {
-      console.log(quiz);
-    }
+    const result = quizSchema.validate(quiz);
+    console.log(result);
+  };
+
+  const deleteQuestion = (index) => {
+    index === 0
+      ? setStatus({ ...status, page: 0 })
+      : setStatus({ ...status, page: index - 1 });
+
+    setQuiz(
+      produce(quiz, (draft) => {
+        draft.questions.splice(index, 1);
+      })
+    );
   };
 
   useEffect(() => {
@@ -191,9 +271,8 @@ const CreateQuiz = () => {
           <Paper elevation={0} className={classes.quizDescriptionWrapper}>
             <TextField
               disabled={status.isQuizNameSubmitted}
-              name="description"
               value={quiz.description}
-              onChange={handleInput}
+              onChange={handleQuizDescriptionInput}
               label="Testine Bir Açıklama Belirle !"
               variant="outlined"
               fullWidth
@@ -207,27 +286,46 @@ const CreateQuiz = () => {
               disabled={quiz.description === "" || status.isQuizNameSubmitted}
               onClick={submitQuizDescription}
             >
-              Test Açıklamasını Girdim
+              {quiz.description === ""
+                ? "Test Açıklamasını Giriniz"
+                : "İlerleyelim ->"}
             </Button>
           </Paper>
         ) : null}
 
         {status.step === 1 ? (
           <Paper elevation={0} className={classes.questionWrapper}>
+            <Grid item xs={12} className={classes.pageButtonWrapper}>
+              <Pagination
+                count={quiz.questions.length === 0 ? 1 : quiz.questions.length}
+                page={status.page + 1}
+                onChange={(e, pageToGo) => {
+                  setStatus(
+                    produce(status, (draft) => {
+                      draft.page = pageToGo - 1;
+                    })
+                  );
+                }}
+              />
+            </Grid>
             <div className={classes.question}>
               <TextField
-                error={question.descriptionErrorMessage !== ""}
-                helperText={question.descriptionErrorMessage}
+                error={
+                  quiz.questions[status.page].descriptionErrorMessage !== ""
+                }
+                helperText={quiz.questions[status.page].descriptionErrorMessage}
                 label="Soru"
                 variant="filled"
                 fullWidth
-                value={question.description}
+                value={quiz.questions[status.page].description}
                 onChange={(e) =>
-                  setQuestion(
-                    produce(question, (draft) => {
-                      draft.description = e.target.value;
-                      draft.descriptionErrorMessage = "";
-                      draft.answers.map((answer) => (answer.errorMessage = ""));
+                  setQuiz(
+                    produce(quiz, (draft) => {
+                      draft.questions[status.page].description = e.target.value;
+                      draft.questions[status.page].descriptionErrorMessage = "";
+                      draft.questions[status.page].answers.forEach(
+                        (answer) => (answer.errorMessage = "")
+                      );
                     })
                   )
                 }
@@ -235,19 +333,36 @@ const CreateQuiz = () => {
               />
             </div>
             <Grid item xs={12} className={classes.choiceWrapper}>
-              {question.answers.map((answer, index) => (
+              {quiz.questions[status.page].answers.map((answer, index) => (
                 <div className={classes.choice} key={index}>
                   <Radio
-                    checked={answer.index === question.answerIndex}
-                    name="radio-button-demo"
+                    checked={
+                      answer.index === quiz.questions[status.page].answerIndex
+                    }
                     onChange={() =>
-                      setQuestion({
-                        ...question,
-                        answerIndex: answer.index,
-                      })
+                      setQuiz(
+                        produce(quiz, (draft) => {
+                          draft.questions[status.page].answerIndex =
+                            answer.index;
+                        })
+                      )
                     }
                   />
                   <TextField
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            disabled={answer.index === 0}
+                            aria-label="toggle password visibility"
+                            onClick={() => deleteChoice(answer.index)}
+                            onMouseDown={(e) => e.preventDefault()}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
                     variant="outlined"
                     error={answer.errorMessage !== ""}
                     helperText={answer.errorMessage}
@@ -284,18 +399,29 @@ const CreateQuiz = () => {
                 >
                   Başka Soru Ekle
                 </Button>
-                {quiz.questions.length > 0 ? (
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    color="secondary"
-                    fullWidth
-                    onClick={submitQuiz}
-                    className={classes.button}
-                  >
-                    Testi Bitir
-                  </Button>
-                ) : null}
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                  onClick={() => deleteQuestion(status.page)}
+                  className={classes.button}
+                  disabled={quiz.questions.length < 2}
+                >
+                  Soruyu Sil
+                </Button>
+
+                <Button
+                  disabled={!quiz.questions.length > 0}
+                  type="submit"
+                  variant="contained"
+                  color="secondary"
+                  fullWidth
+                  onClick={submitQuiz}
+                  className={classes.button}
+                >
+                  Testi Bitir
+                </Button>
               </Grid>
             </div>
           </Paper>

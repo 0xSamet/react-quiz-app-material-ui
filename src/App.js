@@ -102,6 +102,9 @@ const App = () => {
       primary: {
         main: "#1976d2",
       },
+      secondary: {
+        main: "#f06292",
+      },
     },
   });
 
@@ -110,6 +113,9 @@ const App = () => {
       type: "dark",
       primary: {
         main: "#90caf9",
+      },
+      secondary: {
+        main: "#f48fb1",
       },
     },
   });
