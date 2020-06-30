@@ -157,7 +157,8 @@ const Register = () => {
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
         open={requestSuccessMessage !== ""}
         onClose={() => dispatch(registerSuccess(""))}
-        autoHideDuration={2000}
+        autoHideDuration={1000}
+        disableWindowBlurListener
       >
         <Alert variant="filled" severity="success">
           {requestSuccessMessage}

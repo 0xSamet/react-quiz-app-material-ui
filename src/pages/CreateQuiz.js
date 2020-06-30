@@ -363,7 +363,8 @@ const CreateQuiz = () => {
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
         open={requestErrorMessage !== ""}
         onClose={() => dispatch(createFailure(""))}
-        autoHideDuration={3000}
+        autoHideDuration={1000}
+        disableWindowBlurListener
       >
         <Alert variant="filled" severity="error">
           {requestErrorMessage}
@@ -374,7 +375,8 @@ const CreateQuiz = () => {
           anchorOrigin={{ vertical: "top", horizontal: "center" }}
           open={requestSuccessMessage !== ""}
           onClose={() => dispatch(createSuccess(""))}
-          autoHideDuration={2000}
+          autoHideDuration={1000}
+          disableWindowBlurListener
         >
           <Alert variant="filled" severity="success">
             {requestSuccessMessage}

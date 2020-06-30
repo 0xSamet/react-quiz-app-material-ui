@@ -128,7 +128,8 @@ const Login = () => {
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
         open={requestErrorMessage !== ""}
         onClose={() => dispatch(loginFailure(""))}
-        autoHideDuration={2000}
+        autoHideDuration={1000}
+        disableWindowBlurListener
       >
         <Alert variant="filled" severity="error">
           {requestErrorMessage}
