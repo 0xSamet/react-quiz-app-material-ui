@@ -15,9 +15,9 @@ import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 
-import FormControl from "@material-ui/core/FormControl";
-import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
+import Snackbar from "@material-ui/core/Snackbar";
+import Alert from "@material-ui/lab/Alert";
+
 import InputAdornment from "@material-ui/core/InputAdornment";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -26,7 +26,7 @@ import Pagination from "@material-ui/lab/Pagination";
 
 import produce from "immer";
 
-import Joi from "@hapi/joi";
+import { createQuiz, createFailure, createSuccess } from "../store/quiz";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -66,30 +66,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const quizSchema = Joi.object({
-  description: Joi.string().trim().required(),
-  questions: Joi.array()
-    .items(
-      Joi.object({
-        description: Joi.string().trim().required(),
-        answers: Joi.array()
-          .items(
-            Joi.object({
-              index: Joi.number().required(),
-              description: Joi.string().trim().required(),
-            })
-          )
-          .unique("index"),
-        answerIndex: Joi.number().required(),
-      })
-    )
-    .required(),
-});
-
 const CreateQuiz = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const requestErrorMessage = useSelector(
+    (state) => state.quizzes.errorMessage
+  );
+
+  const requestSuccessMessage = useSelector(
+    (state) => state.quizzes.successMessage
+  );
 
   const questionDefault = {
     description: "",
@@ -164,86 +151,40 @@ const CreateQuiz = () => {
             return answer.index === index;
           }
         );
-        draft.questions[status.page].answers.splice(indexOfChoice, 1);
-        if (quiz.questions[status.page].answerIndex === index) {
-          draft.questions[status.page].answerIndex =
-            draft.questions[status.page].answerIndex - 1;
+        if (index === quiz.questions[status.page].answerIndex) {
+          draft.questions[status.page].answerIndex = indexOfChoice - 1;
         }
+        draft.questions[status.page].answers.splice(indexOfChoice, 1);
       })
     );
   };
 
   const addQuestion = () => {
-    if (checkFields()) {
-      setQuiz(
-        produce(quiz, (draft) => {
-          draft.questions.push(questionDefault);
-        })
-      );
-      setStatus(
-        produce(status, (draft) => {
-          draft.page = quiz.questions.length;
-        })
-      );
-    }
-  };
-
-  const checkFields = () => {
-    let changeQuestionStateTo = { ...quiz };
-    let point = 0;
-
-    if (changeQuestionStateTo.questions[status.page].description === "") {
-      changeQuestionStateTo = produce(changeQuestionStateTo, (draft) => {
-        draft.questions[status.page].descriptionErrorMessage =
-          "Soruyu Doldurunuz !";
-      });
-    } else {
-      changeQuestionStateTo = produce(changeQuestionStateTo, (draft) => {
-        draft.questions[status.page].descriptionErrorMessage = "";
-      });
-
-      point++;
-    }
-
-    if (
-      changeQuestionStateTo.questions[status.page].descriptionErrorMessage ===
-      ""
-    ) {
-      for (
-        let i = 0;
-        i < changeQuestionStateTo.questions[status.page].answers.length;
-        i++
-      ) {
-        if (
-          changeQuestionStateTo.questions[status.page].answers[i]
-            .description === ""
-        ) {
-          changeQuestionStateTo = produce(changeQuestionStateTo, (draft) => {
-            draft.questions[status.page].answers[i].errorMessage =
-              "Doldurunuz !";
-          });
-        } else {
-          changeQuestionStateTo = produce(changeQuestionStateTo, (draft) => {
-            draft.questions[status.page].answers[i].errorMessage = "";
-          });
-          point++;
-        }
-      }
-    }
-
-    setQuiz(changeQuestionStateTo);
-
-    return setTimeout(() => {
-      return point ===
-        changeQuestionStateTo.questions[status.page].answers.length + 1
-        ? true
-        : false;
-    }, 2000);
+    setQuiz(
+      produce(quiz, (draft) => {
+        draft.questions.push(questionDefault);
+      })
+    );
+    setStatus(
+      produce(status, (draft) => {
+        draft.page = quiz.questions.length;
+      })
+    );
   };
 
   const submitQuiz = () => {
-    const result = quizSchema.validate(quiz);
-    console.log(result);
+    dispatch(
+      createQuiz(
+        produce(quiz, (draft) => {
+          draft.questions.forEach((question) => {
+            delete question.descriptionErrorMessage;
+            question.answers.forEach((answer) => {
+              delete answer.errorMessage;
+            });
+          });
+        })
+      )
+    );
   };
 
   const deleteQuestion = (index) => {
@@ -427,6 +368,28 @@ const CreateQuiz = () => {
           </Paper>
         ) : null}
       </Grid>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        open={requestErrorMessage !== ""}
+        onClose={() => dispatch(createFailure(""))}
+        autoHideDuration={3000}
+      >
+        <Alert variant="filled" severity="error">
+          {requestErrorMessage}
+        </Alert>
+      </Snackbar>
+      {
+        <Snackbar
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          open={requestSuccessMessage !== ""}
+          onClose={() => dispatch(createSuccess(""))}
+          autoHideDuration={2000}
+        >
+          <Alert variant="filled" severity="success">
+            {requestSuccessMessage}
+          </Alert>
+        </Snackbar>
+      }
     </Grid>
   ) : (
     <Redirect to="/girisyap" />

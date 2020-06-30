@@ -8,7 +8,7 @@ import TextField from "@material-ui/core/TextField";
 import QuizCard from "../components/QuizCard";
 import { useSelector } from "react-redux";
 
-import { fetch } from "../store/quiz";
+import { fetchQuizzes } from "../store/quiz";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,7 +32,7 @@ const Quizzes = () => {
   useEffect(() => {
     dispatch(changeMenuIndex(4));
     dispatch(changeTitle("Testler"));
-    dispatch(fetch());
+    dispatch(fetchQuizzes());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -41,7 +41,7 @@ const Quizzes = () => {
   };
 
   useEffect(() => {
-    dispatch(fetch(filterQuery));
+    dispatch(fetchQuizzes(filterQuery));
   }, [dispatch, filterQuery]);
 
   return (
@@ -58,18 +58,20 @@ const Quizzes = () => {
           />
         </Paper>
       </Grid>
-      {quizzes.map((quiz) => {
-        return (
-          <Grid item xs={12} md={6} key={quiz._id}>
-            <QuizCard
-              id={quiz._id}
-              author={quiz.author.name}
-              description={quiz.description}
-              createdAt={quiz.createdAt}
-            />
-          </Grid>
-        );
-      })}
+      {quizzes.length > 0
+        ? quizzes.map((quiz) => {
+            return (
+              <Grid item xs={12} md={6} key={quiz._id}>
+                <QuizCard
+                  id={quiz._id}
+                  author={quiz.author.name}
+                  description={quiz.description}
+                  createdAt={quiz.createdAt}
+                />
+              </Grid>
+            );
+          })
+        : null}
     </Grid>
   );
 };

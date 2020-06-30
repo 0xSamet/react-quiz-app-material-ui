@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
@@ -24,7 +24,10 @@ import Profile from "./pages/Profile";
 import CreateQuiz from "./pages/CreateQuiz";
 import MyDrawer from "./components/MyDrawer";
 import { toggleMobileDrawer } from "./store/menu";
+import { loginSuccess, logout } from "./store/auth";
 import LinearProgress from "@material-ui/core/LinearProgress";
+
+import axios from "axios";
 
 const drawerWidth = 240;
 
@@ -86,15 +89,26 @@ const App = () => {
 
   const dispatch = useDispatch();
 
-  /*useEffect(() => {
-    axios
-      .get(process.env.REACT_APP_API_BASE_URL, {
-        headers: {
-          authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      })
-      .then((res) => console.log(res));
-  }, []);*/
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      axios
+        .get(process.env.REACT_APP_API_BASE_URL, {
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        })
+        .then((res) => {
+          if (res.data.user) {
+            dispatch(
+              loginSuccess(localStorage.getItem("token"), res.data.user)
+            );
+            return;
+          }
+          dispatch(logout());
+        });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const lightTheme = createMuiTheme({
     palette: {

@@ -1,4 +1,4 @@
-const INITIAL_STATE = false;
+const INITIAL_STATE = true;
 
 export const changeTheme = () => ({
   type: "CHANGE_THEME",

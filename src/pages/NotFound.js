@@ -11,8 +11,15 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     justifyContent: "center",
+  },
+  wrapper: {
+    display: "flex",
+    justifyContent: "center",
     flexDirection: "column",
     alignItems: "center",
+  },
+  notFoundGif: {
+    maxWidth: "100%",
   },
 }));
 
@@ -27,16 +34,9 @@ const NotFound = () => {
   }, []);
 
   return (
-    <Grid container>
-      <Grid item xs={12} className={classes.root}>
-        <img
-          src={notFoundGif}
-          alt="404"
-          style={{
-            minWidth: "100%",
-            maxWidth: "100%",
-          }}
-        ></img>
+    <Grid container className={classes.root}>
+      <Grid item xs={12} className={classes.wrapper}>
+        <img src={notFoundGif} alt="404" className={classes.notFoundGif}></img>
         <Typography variant="h3" gutterBottom>
           <Link to="/">Anasayfaya Git</Link>
         </Typography>

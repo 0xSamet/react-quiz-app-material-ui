@@ -50,7 +50,6 @@ export const login = (user) => async (dispatch) => {
           dispatch(loginSuccess(result.data.token, user));
         }
       );
-
       return;
     }
     throw new Error(result.data.message);
@@ -59,9 +58,16 @@ export const login = (user) => async (dispatch) => {
   }
 };
 
-export const logout = () => ({
+export const logoutSuccess = () => ({
   type: "LOGOUT_SUCCESS",
 });
+
+export const logout = () => (dispatch) => {
+  dispatch(logoutSuccess());
+  if (localStorage.getItem("token")) {
+    localStorage.removeItem("token");
+  }
+};
 
 export const authReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {

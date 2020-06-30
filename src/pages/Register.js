@@ -82,7 +82,7 @@ const Register = () => {
     return point === 3 ? true : false;
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (checkInputs()) {
       dispatch(register(user));
