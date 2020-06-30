@@ -9,23 +9,32 @@ const INITIAL_STATE = {
   user: {},
 };
 
+const LOGIN_START = "LOGIN_START";
+const LOGIN_FAILURE = "LOGIN_FAILURE";
+const LOGIN_SUCCESS = "LOGIN_SUCCESS";
+const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
+
 export const loginStart = () => ({
-  type: "LOGIN_START",
+  type: LOGIN_START,
 });
 
 export const loginFailure = (message) => ({
-  type: "LOGIN_FAILURE",
+  type: LOGIN_FAILURE,
   payload: {
     message,
   },
 });
 
 export const loginSuccess = (token, user) => ({
-  type: "LOGIN_SUCCESS",
+  type: LOGIN_SUCCESS,
   payload: {
     token,
     user,
   },
+});
+
+export const logoutSuccess = () => ({
+  type: LOGOUT_SUCCESS,
 });
 
 export const login = (user) => async (dispatch) => {
@@ -58,10 +67,6 @@ export const login = (user) => async (dispatch) => {
   }
 };
 
-export const logoutSuccess = () => ({
-  type: "LOGOUT_SUCCESS",
-});
-
 export const logout = () => (dispatch) => {
   dispatch(logoutSuccess());
   if (localStorage.getItem("token")) {
@@ -71,9 +76,9 @@ export const logout = () => (dispatch) => {
 
 export const authReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case "LOGIN_START":
+    case LOGIN_START:
       return { ...state, isFetching: true, isAuthenticated: false, user: {} };
-    case "LOGIN_SUCCESS":
+    case LOGIN_SUCCESS:
       return {
         ...state,
         isFetching: false,
@@ -81,7 +86,7 @@ export const authReducer = (state = INITIAL_STATE, action) => {
         token: action.payload.token,
         user: action.payload.user,
       };
-    case "LOGIN_FAILURE":
+    case LOGIN_FAILURE:
       return {
         ...state,
         isFetching: false,
@@ -89,7 +94,7 @@ export const authReducer = (state = INITIAL_STATE, action) => {
         loginError: action.payload.message,
         user: {},
       };
-    case "LOGOUT_SUCCESS":
+    case LOGOUT_SUCCESS:
       return { ...state, isAuthenticated: false, token: "", user: {} };
     default:
       return state;

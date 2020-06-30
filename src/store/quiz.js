@@ -1,18 +1,18 @@
 import axios from "axios";
 
-const FETCH_START = "FETCH_START";
-const FETCH_SUCCESS = "FETCH_SUCCESS";
-const FETCH_FAILURE = "FETCH_FAILURE";
-const CREATE_START = "CREATE_START";
-const CREATE_SUCCESS = "CREATE_SUCCESS";
-const CREATE_FAILURE = "CREATE_FAILURE";
-
 const INITIAL_STATE = {
   isFetching: false,
   errorMessage: "",
   successMessage: "",
   quizzes: [],
 };
+
+const FETCH_START = "FETCH_START";
+const FETCH_SUCCESS = "FETCH_SUCCESS";
+const FETCH_FAILURE = "FETCH_FAILURE";
+const CREATE_START = "CREATE_START";
+const CREATE_SUCCESS = "CREATE_SUCCESS";
+const CREATE_FAILURE = "CREATE_FAILURE";
 
 export const fetchStart = () => ({
   type: FETCH_START,
@@ -30,18 +30,18 @@ export const fetchFailure = () => ({
 });
 
 export const createStart = () => ({
-  type: "CREATE_START",
+  type: CREATE_START,
 });
 
 export const createSuccess = (message) => ({
-  type: "CREATE_SUCCESS",
+  type: CREATE_SUCCESS,
   payload: {
     message,
   },
 });
 
 export const createFailure = (message) => ({
-  type: "CREATE_FAILURE",
+  type: CREATE_FAILURE,
   payload: {
     message,
   },
