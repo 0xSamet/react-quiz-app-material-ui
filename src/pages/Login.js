@@ -3,16 +3,14 @@ import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
-import { useDispatch, useSelector } from "react-redux";
-import { changeMenuIndex, changeTitle } from "../store/menu";
-//import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
 
-import { login, loginFailure } from "../store/auth";
-
+import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
+import { changeMenuIndex, changeTitle } from "../store/menu";
+import { login, loginFailure } from "../store/auth";
 
 const useStyles = makeStyles((theme) => ({
   root: {

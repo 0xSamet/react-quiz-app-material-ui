@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { changeMenuIndex, changeTitle } from "../store/menu";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
-//import Button from "@material-ui/core/Button";
+
 import { Redirect } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { changeMenuIndex, changeTitle } from "../store/menu";
 
 const useStyles = makeStyles((theme) => ({
   root: {

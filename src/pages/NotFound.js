@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { changeMenuIndex, changeTitle } from "../store/menu";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import notFoundGif from "../assets/404.gif";
+
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { changeMenuIndex, changeTitle } from "../store/menu";
+import notFoundGif from "../assets/404.gif";
 
 const useStyles = makeStyles((theme) => ({
   root: {

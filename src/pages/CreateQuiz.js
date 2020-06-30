@@ -1,31 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { changeMenuIndex, changeTitle } from "../store/menu";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
-
-import { useSelector } from "react-redux";
-import { Redirect } from "react-router-dom";
-
 import Divider from "@material-ui/core/Divider";
-
 import Radio from "@material-ui/core/Radio";
-
 import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-
 import Snackbar from "@material-ui/core/Snackbar";
-import Alert from "@material-ui/lab/Alert";
-
 import InputAdornment from "@material-ui/core/InputAdornment";
 import IconButton from "@material-ui/core/IconButton";
+import Alert from "@material-ui/lab/Alert";
+import Pagination from "@material-ui/lab/Pagination";
 import DeleteIcon from "@material-ui/icons/Delete";
 
-import Pagination from "@material-ui/lab/Pagination";
-
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { Redirect } from "react-router-dom";
 import produce from "immer";
-
+import { changeMenuIndex, changeTitle } from "../store/menu";
 import { createQuiz, createFailure, createSuccess } from "../store/quiz";
 
 const useStyles = makeStyles((theme) => ({
@@ -104,7 +96,6 @@ const CreateQuiz = () => {
   };
 
   const [quiz, setQuiz] = useState(quizDefault);
-  //const [question, setQuestion] = useState(questionDefault);
   const [status, setStatus] = useState(statusDefault);
 
   const handleQuizDescriptionInput = (e) => {

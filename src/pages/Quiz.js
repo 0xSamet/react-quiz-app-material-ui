@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-//import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
@@ -11,7 +10,6 @@ import Button from "@material-ui/core/Button";
 import { useParams } from "react-router-dom";
 import { useStore, useDispatch } from "react-redux";
 import { changeTitle, changeMenuIndex } from "../store/menu";
-
 import AnswerListItem from "../components/AnswerListItem";
 
 const useStyles = makeStyles((theme) => ({

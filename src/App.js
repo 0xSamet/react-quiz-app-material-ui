@@ -3,31 +3,32 @@ import AppBar from "@material-ui/core/AppBar";
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
 import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import MenuIcon from "@material-ui/icons/Menu";
 import {
   makeStyles,
   createMuiTheme,
   ThemeProvider,
 } from "@material-ui/core/styles";
-import { Switch as RouterSwitch, Route } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import HomePage from "./pages/HomePage";
+
+import HomePage from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Quizzes from "./pages/Quizzes";
 import NotFound from "./pages/NotFound";
-import QuizPage from "./pages/QuizPage";
+import Quiz from "./pages/Quiz";
 import Profile from "./pages/Profile";
 import CreateQuiz from "./pages/CreateQuiz";
 import MyDrawer from "./components/MyDrawer";
-import { toggleMobileDrawer } from "./store/menu";
-import { loginSuccess, logout } from "./store/auth";
-import LinearProgress from "@material-ui/core/LinearProgress";
 
 import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
+import { Switch as RouterSwitch, Route } from "react-router-dom";
+import { toggleMobileDrawer } from "./store/menu";
+import { loginSuccess, logout } from "./store/auth";
 
 const drawerWidth = 240;
 
@@ -210,7 +211,7 @@ const App = () => {
               <Route exact path="/kayitol" component={Register} />
               <Route exact path="/testler" component={Quizzes} />
               <Route exact path="/testler/olustur" component={CreateQuiz} />
-              <Route exact path="/test/:testId" component={QuizPage} />
+              <Route exact path="/test/:testId" component={Quiz} />
               <Route path="*" component={NotFound} />
             </RouterSwitch>
           </div>

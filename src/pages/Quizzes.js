@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { changeMenuIndex, changeTitle } from "../store/menu";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
-import QuizCard from "../components/QuizCard";
-import { useSelector } from "react-redux";
 
+import { useDispatch, useSelector } from "react-redux";
+import { changeMenuIndex, changeTitle } from "../store/menu";
 import { fetchQuizzes } from "../store/quiz";
+import QuizCard from "../components/QuizCard";
 
 const useStyles = makeStyles((theme) => ({
   root: {
