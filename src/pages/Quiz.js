@@ -63,6 +63,7 @@ const QuizPage = () => {
   const classes = useStyles();
   const { testId } = useParams();
   const dispatch = useDispatch();
+  const store = useStore();
   const [quiz, setQuiz] = useState({
     step: 0,
     questions: [],
@@ -71,8 +72,6 @@ const QuizPage = () => {
     isDone: false,
     score: 0,
   });
-
-  const store = useStore();
 
   useEffect(() => {
     dispatch(changeTitle("Test Sayfası"));
@@ -118,7 +117,7 @@ const QuizPage = () => {
             </Paper>
           </Box>
         ) : null}
-        {quiz.questions.length && !quiz.isDone > 0 ? (
+        {quiz.questions.length > 0 && !quiz.isDone ? (
           <Box>
             <Paper elevation={0} square className={classes.progress}>
               <Typography variant="h5">

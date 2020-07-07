@@ -67,7 +67,6 @@ const useStyles = makeStyles((theme) => {
     },
     content: {
       flexGrow: 1,
-      minHeight: "100vh",
       padding: theme.spacing(2),
     },
     title: {
@@ -165,7 +164,7 @@ const App = () => {
             </Typography>
           </Toolbar>
         </AppBar>
-        <nav className={classes.drawer} aria-label="mailbox folders">
+        <nav className={classes.drawer}>
           {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
           <Hidden smUp implementation="css">
             <Drawer

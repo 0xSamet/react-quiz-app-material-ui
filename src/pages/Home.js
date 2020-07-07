@@ -1,24 +1,27 @@
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { changeMenuIndex, changeTitle } from "../store/menu";
-//import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
+import Paper from "@material-ui/core/Paper";
 
-/*const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    flexGrow: 1,
-  },
-}));*/
+import { useDispatch } from "react-redux";
+import { useSpring, animated } from "react-spring";
+import { changeMenuIndex, changeTitle } from "../store/menu";
+
+const useStyles = makeStyles((theme) => ({
+  container: {},
+}));
 
 const HomePage = () => {
-  //const classes = useStyles();
+  const classes = useStyles();
   const dispatch = useDispatch();
+  const props = useSpring({
+    from: {
+      opacity: 0,
+    },
+    to: {
+      opacity: 1,
+    },
+  });
 
   useEffect(() => {
     dispatch(changeMenuIndex(3));
@@ -27,9 +30,12 @@ const HomePage = () => {
   }, []);
 
   return (
-    <Grid container>
+    <Grid container className={classes.container} spacing={2}>
       <Grid item xs={12}>
-        <p>HomePage</p>
+        <animated.div style={{ ...props, textAlign: "center" }}>
+          Test Çözebilir veya kendi testinizi oluşturmak için Giriş
+          Yapabilirsiniz
+        </animated.div>
       </Grid>
     </Grid>
   );
