@@ -7,10 +7,11 @@ import Divider from "@material-ui/core/Divider";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { useStore, useDispatch } from "react-redux";
 import { changeTitle, changeMenuIndex } from "../store/menu";
 import AnswerListItem from "../components/AnswerListItem";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -62,6 +63,7 @@ const useStyles = makeStyles((theme) => ({
 const QuizPage = () => {
   const classes = useStyles();
   const { testId } = useParams();
+  const history = useHistory();
   const dispatch = useDispatch();
   const store = useStore();
   const [quiz, setQuiz] = useState({
@@ -79,6 +81,19 @@ const QuizPage = () => {
     const currentQuiz = store.getState().quizzes.quizzes.find((quiz) => {
       return quiz._id === testId;
     });
+
+    if (!currentQuiz) {
+      axios
+        .get(`${process.env.REACT_APP_API_BASE_URL}/testler/${testId}`)
+        .then((result) => {
+          if (result) {
+            setQuiz({ ...quiz, ...result.data[0] });
+            return;
+          }
+          return history.push("/testler");
+        });
+    }
+
     setQuiz({ ...quiz, ...currentQuiz });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
