@@ -43,6 +43,7 @@ const Profile = () => {
   }, []);
 
   useEffect(() => {
+    console.log({ currentUser });
     if (currentUser && currentUser.name && currentUser.mail) {
       setUser({ name: currentUser.name, mail: currentUser.mail });
     }

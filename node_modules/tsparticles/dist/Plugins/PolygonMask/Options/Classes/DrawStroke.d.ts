@@ -1,0 +1,10 @@
+import type { IDrawStroke } from "../Interfaces/IDrawStroke";
+import type { RecursivePartial } from "../../../../Types/RecursivePartial";
+import { OptionsColor } from "../../../../Options/Classes/OptionsColor";
+export declare class DrawStroke implements IDrawStroke {
+    color: OptionsColor;
+    width: number;
+    opacity: number;
+    constructor();
+    load(data?: RecursivePartial<IDrawStroke>): void;
+}

@@ -1,5 +1,4 @@
 import axios from "axios";
-import jwt from "jsonwebtoken";
 
 const INITIAL_STATE = {
   loginError: "",
@@ -45,20 +44,11 @@ export const login = (user) => async (dispatch) => {
       user
     );
     if (result.status === 202) {
-      jwt.verify(
-        result.data.token,
-        process.env.REACT_APP_JWT_SECRET,
-        (err, user) => {
-          if (err) {
-            dispatch(loginFailure(err.message));
-          }
-          if (localStorage.getItem("token")) {
-            localStorage.removeItem("token");
-          }
-          localStorage.setItem("token", result.data.token);
-          dispatch(loginSuccess(result.data.token, user));
-        }
-      );
+      if (localStorage.getItem("token")) {
+        localStorage.removeItem("token");
+      }
+      localStorage.setItem("token", result.data.token);
+      dispatch(loginSuccess(result.data.token, result.data.user));
       return;
     }
     throw new Error(result.data.message);

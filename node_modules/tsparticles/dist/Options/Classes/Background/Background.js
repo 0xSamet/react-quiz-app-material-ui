@@ -1,0 +1,30 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Background = void 0;
+const OptionsColor_1 = require("../OptionsColor");
+class Background {
+    load(data) {
+        if (data === undefined) {
+            return;
+        }
+        if (data.color !== undefined) {
+            this.color = OptionsColor_1.OptionsColor.create(this.color, data.color);
+        }
+        if (data.image !== undefined) {
+            this.image = data.image;
+        }
+        if (data.position !== undefined) {
+            this.position = data.position;
+        }
+        if (data.repeat !== undefined) {
+            this.repeat = data.repeat;
+        }
+        if (data.size !== undefined) {
+            this.size = data.size;
+        }
+        if (data.opacity !== undefined) {
+            this.opacity = data.opacity;
+        }
+    }
+}
+exports.Background = Background;
