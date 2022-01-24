@@ -39,10 +39,14 @@ const Profile = () => {
   useEffect(() => {
     dispatch(changeMenuIndex(0));
     dispatch(changeTitle("Profilim"));
-    setUser({ name: currentUser.name, mail: currentUser.mail });
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (currentUser && currentUser.name && currentUser.mail) {
+      setUser({ name: currentUser.name, mail: currentUser.mail });
+    }
+  }, [currentUser]);
 
   const checkInputs = () => {
     let point = 0;
