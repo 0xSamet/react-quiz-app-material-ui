@@ -45,7 +45,7 @@ const QuizCard = ({ id, author, description, createdAt }) => {
       <CardHeader
         avatar={
           <Avatar aria-label="recipe" className={classes.avatar}>
-            {author.charAt(0)}
+            {author.length > 0 ? author.charAt(0) : "R"}
           </Avatar>
         }
         title={author}
