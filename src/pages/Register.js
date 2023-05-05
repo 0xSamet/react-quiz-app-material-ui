@@ -47,7 +47,7 @@ const Register = () => {
 
   useEffect(() => {
     dispatch(changeMenuIndex(2));
-    dispatch(changeTitle("Kayıt Ol"));
+    dispatch(changeTitle("Register"));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -61,19 +61,19 @@ const Register = () => {
   const checkInputs = () => {
     let point = 0;
     if (user.name.length === 0) {
-      setNameError("İsim Boş Bırakılamaz");
+      setNameError("Name is required");
     } else {
       setNameError("");
       point++;
     }
     if (user.mail.length === 0) {
-      setEMailError("Email Boş Bırakılamaz");
+      setEMailError("Email is required");
     } else {
       setEMailError("");
       point++;
     }
     if (user.password.length < 6) {
-      setPasswordError("Şifre En Az 6 Karakter İçermeli !");
+      setPasswordError("Password should include atleast 6 characters");
     } else {
       setPasswordError("");
       point++;
@@ -94,7 +94,7 @@ const Register = () => {
         <Grid item s={12} md={8}>
           <form onSubmit={handleSubmit}>
             <Typography variant="h5" gutterBottom align="center">
-              Kayıt Ol
+              Register
             </Typography>
             <TextField
               autoFocus
@@ -102,7 +102,7 @@ const Register = () => {
               error={nameError !== ""}
               helperText={nameError}
               name="name"
-              label="Ad Soyad"
+              label="Name"
               variant="outlined"
               fullWidth
               className={classes.formElement}
@@ -124,7 +124,7 @@ const Register = () => {
               error={passwordError !== ""}
               helperText={passwordError}
               name="password"
-              label="Şifre"
+              label="Password"
               variant="outlined"
               fullWidth
               className={classes.formElement}
@@ -138,7 +138,7 @@ const Register = () => {
               type="submit"
               disabled={isFetching}
             >
-              Kayıt Ol
+              Register
             </Button>
           </form>
         </Grid>

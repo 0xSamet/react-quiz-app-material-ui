@@ -15,7 +15,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { Redirect } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 import produce from "immer";
 import { changeMenuIndex, changeTitle } from "../store/menu";
 import { createQuiz, createFailure, createSuccess } from "../store/quiz";
@@ -61,6 +61,7 @@ const useStyles = makeStyles((theme) => ({
 const CreateQuiz = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const history = useHistory();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const requestErrorMessage = useSelector(
     (state) => state.quizzes.errorMessage
@@ -173,7 +174,8 @@ const CreateQuiz = () => {
               delete answer.errorMessage;
             });
           });
-        })
+        }),
+        history
       )
     );
   };
@@ -192,7 +194,7 @@ const CreateQuiz = () => {
 
   useEffect(() => {
     dispatch(changeMenuIndex(5));
-    dispatch(changeTitle("Soru Oluştur"));
+    dispatch(changeTitle("Create a quiz"));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -205,7 +207,7 @@ const CreateQuiz = () => {
               disabled={status.isQuizNameSubmitted}
               value={quiz.description}
               onChange={handleQuizDescriptionInput}
-              label="Testine Bir Açıklama Belirle !"
+              label="Type a description"
               variant="outlined"
               fullWidth
               className={classes.quizDescription}
@@ -218,9 +220,7 @@ const CreateQuiz = () => {
               disabled={quiz.description === "" || status.isQuizNameSubmitted}
               onClick={submitQuizDescription}
             >
-              {quiz.description === ""
-                ? "Test Açıklamasını Giriniz"
-                : "İlerleyelim ->"}
+              {quiz.description === "" ? "Type a description" : "Next ->"}
             </Button>
           </Paper>
         ) : null}
@@ -246,7 +246,7 @@ const CreateQuiz = () => {
                   quiz.questions[status.page].descriptionErrorMessage !== ""
                 }
                 helperText={quiz.questions[status.page].descriptionErrorMessage}
-                label="Soru"
+                label="Question"
                 variant="filled"
                 fullWidth
                 value={quiz.questions[status.page].description}
@@ -319,7 +319,7 @@ const CreateQuiz = () => {
                   onClick={addChoice}
                   className={classes.button}
                 >
-                  Yeni Şık Ekle
+                  Add a new option
                 </Button>
                 <Button
                   type="submit"
@@ -329,7 +329,7 @@ const CreateQuiz = () => {
                   onClick={addQuestion}
                   className={classes.button}
                 >
-                  Başka Soru Ekle
+                  Add another question
                 </Button>
                 <Button
                   type="submit"
@@ -340,7 +340,7 @@ const CreateQuiz = () => {
                   className={classes.button}
                   disabled={quiz.questions.length < 2}
                 >
-                  Soruyu Sil
+                  Delete the Question
                 </Button>
 
                 <Button
@@ -352,7 +352,7 @@ const CreateQuiz = () => {
                   onClick={submitQuiz}
                   className={classes.button}
                 >
-                  Testi Bitir
+                  Finish the quiz
                 </Button>
               </Grid>
             </div>
@@ -385,7 +385,7 @@ const CreateQuiz = () => {
       }
     </Grid>
   ) : (
-    <Redirect to="/girisyap" />
+    <Redirect to="/login" />
   );
 };
 

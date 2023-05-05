@@ -90,18 +90,18 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (localStorage.getItem("token")) {
+    const token = localStorage.getItem("token");
+
+    if (token) {
       axios
-        .get(process.env.REACT_APP_API_BASE_URL, {
+        .get(`${process.env.REACT_APP_API_BASE_URL}/auth/me`, {
           headers: {
-            authorization: `Bearer ${localStorage.getItem("token")}`,
+            authorization: `Bearer ${token}`,
           },
         })
         .then((res) => {
           if (res.data.user) {
-            dispatch(
-              loginSuccess(localStorage.getItem("token"), res.data.user)
-            );
+            dispatch(loginSuccess(token, res.data.user));
             return;
           }
           dispatch(logout());
@@ -134,11 +134,10 @@ const App = () => {
     },
   });
 
-  const theme = useMemo(() => (darkMode ? darkTheme : lightTheme), [
-    darkMode,
-    lightTheme,
-    darkTheme,
-  ]);
+  const theme = useMemo(
+    () => (darkMode ? darkTheme : lightTheme),
+    [darkMode, lightTheme, darkTheme]
+  );
 
   const handleDrawerToggle = () => {
     dispatch(toggleMobileDrawer());
@@ -151,7 +150,7 @@ const App = () => {
           <Toolbar>
             <IconButton
               color="inherit"
-              aria-label="Menüyü Aç"
+              aria-label="Open the menu"
               edge="start"
               onClick={handleDrawerToggle}
               className={classes.menuButton}
@@ -176,7 +175,7 @@ const App = () => {
                 paper: classes.drawerPaper,
               }}
               ModalProps={{
-                keepMounted: true, // Better open performance on mobile.
+                keepMounted: true,
               }}
             >
               {<MyDrawer />}
@@ -205,12 +204,12 @@ const App = () => {
           <div className={classes.content}>
             <RouterSwitch>
               <Route exact path="/" component={HomePage} />
-              <Route exact path="/profil" component={Profile} />
-              <Route exact path="/girisyap" component={Login} />
-              <Route exact path="/kayitol" component={Register} />
-              <Route exact path="/testler" component={Quizzes} />
-              <Route exact path="/testler/olustur" component={CreateQuiz} />
-              <Route exact path="/test/:testId" component={Quiz} />
+              <Route exact path="/profile" component={Profile} />
+              <Route exact path="/login" component={Login} />
+              <Route exact path="/register" component={Register} />
+              <Route exact path="/quizzes" component={Quizzes} />
+              <Route exact path="/quizzes/create" component={CreateQuiz} />
+              <Route exact path="/quizzes/:testId" component={Quiz} />
               <Route path="*" component={NotFound} />
             </RouterSwitch>
           </div>

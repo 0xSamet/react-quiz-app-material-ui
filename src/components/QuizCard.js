@@ -37,7 +37,7 @@ const QuizCard = ({ id, author, description, createdAt }) => {
   let history = useHistory();
 
   const buttonClickHandler = () => {
-    history.push(`/test/${id}`);
+    history.push(`/quizzes/${id}`);
   };
 
   return (
@@ -59,7 +59,7 @@ const QuizCard = ({ id, author, description, createdAt }) => {
       </CardContent>
       <CardActions disableSpacing>
         <Button size="small" onClick={buttonClickHandler}>
-          Testi Çöz
+          Take the quiz
         </Button>
       </CardActions>
     </Card>

@@ -42,20 +42,20 @@ const Login = () => {
 
   useEffect(() => {
     dispatch(changeMenuIndex(1));
-    dispatch(changeTitle("Giriş Yap"));
+    dispatch(changeTitle("Log In"));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const checkInputs = () => {
     let point = 0;
     if (user.mail.length === 0) {
-      setEMailError("Email Boş Bırakılamaz");
+      setEMailError("Email is required");
     } else {
       setEMailError("");
       point++;
     }
     if (user.password.length < 6) {
-      setPasswordError("Şifre En Az 6 Karakter İçermeli !");
+      setPasswordError("Password should include atleast 6 characters");
     } else {
       setPasswordError("");
       point++;
@@ -77,14 +77,14 @@ const Login = () => {
   };
 
   return isAuthenticated ? (
-    <Redirect to="/profil" />
+    <Redirect to="/profile" />
   ) : (
     <>
       <Grid container justify="center">
         <Grid item s={12} md={8}>
           <form onSubmit={handleSubmit}>
             <Typography variant="h5" gutterBottom align="center">
-              Giriş Yap
+              Log In
             </Typography>
             <TextField
               autoFocus
@@ -105,7 +105,7 @@ const Login = () => {
               helperText={passwordError}
               name="password"
               type="password"
-              label="Şifre"
+              label="Password"
               variant="outlined"
               fullWidth
               className={classes.formElement}
@@ -119,7 +119,7 @@ const Login = () => {
               fullWidth
               disabled={isFetching}
             >
-              Giriş Yap
+              Log In
             </Button>
           </form>
         </Grid>

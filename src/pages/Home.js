@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
 
 import { useDispatch } from "react-redux";
 import { useSpring, animated } from "react-spring";
@@ -25,7 +24,7 @@ const HomePage = () => {
 
   useEffect(() => {
     dispatch(changeMenuIndex(3));
-    dispatch(changeTitle("Anasayfa"));
+    dispatch(changeTitle("Homepage"));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -33,8 +32,7 @@ const HomePage = () => {
     <Grid container className={classes.container} spacing={2}>
       <Grid item xs={12}>
         <animated.div style={{ ...props, textAlign: "center" }}>
-          Test Çözebilir veya kendi testinizi oluşturmak için Giriş
-          Yapabilirsiniz
+          You can take a quiz or you can log-in to create yours
         </animated.div>
       </Grid>
     </Grid>

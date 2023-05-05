@@ -58,6 +58,9 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: 16,
     textAlign: "center",
   },
+  goBackToTheQuizzesButton: {
+    marginTop: 20,
+  },
 }));
 
 const QuizPage = () => {
@@ -76,7 +79,7 @@ const QuizPage = () => {
   });
 
   useEffect(() => {
-    dispatch(changeTitle("Test Sayfası"));
+    dispatch(changeTitle("Quiz Page"));
     dispatch(changeMenuIndex(-1));
     const currentQuiz = store.getState().quizzes.quizzes.find((quiz) => {
       return quiz._id === testId;
@@ -84,14 +87,16 @@ const QuizPage = () => {
 
     if (!currentQuiz) {
       axios
-        .get(`${process.env.REACT_APP_API_BASE_URL}/testler/${testId}`)
+        .get(`${process.env.REACT_APP_API_BASE_URL}/quizzes/${testId}`)
         .then((result) => {
-          if (result) {
-            setQuiz({ ...quiz, ...result.data[0] });
+          console.log(result);
+          if (result?.data?.quiz) {
+            setQuiz({ ...quiz, ...result.data.quiz });
             return;
           }
-          return history.push("/testler");
-        });
+          return history.push("/quizzes");
+        })
+        .catch(() => history.push("/quizzes"));
     }
 
     setQuiz({ ...quiz, ...currentQuiz });
@@ -127,8 +132,17 @@ const QuizPage = () => {
           <Box>
             <Paper elevation={0} square className={classes.progress}>
               <Typography variant="h5">
-                Skorunuz: {quiz.score} / {quiz.questions.length}
+                Your Score: {quiz.score} / {quiz.questions.length}
               </Typography>
+              <Button
+                type="button"
+                variant="contained"
+                color="primary"
+                onClick={() => history.push("/quizzes")}
+                className={classes.goBackToTheQuizzesButton}
+              >
+                See the other quizzes
+              </Button>
             </Paper>
           </Box>
         ) : null}
@@ -178,8 +192,8 @@ const QuizPage = () => {
                     onClick={nextQuestion}
                   >
                     {quiz.step === quiz.questions.length - 1
-                      ? "Testi Bitir"
-                      : "Sonraki Soruya Geç"}
+                      ? "Finish The Quiz"
+                      : "Next Question"}
                   </Button>
                 </Box>
               </>

@@ -40,7 +40,7 @@ export const login = (user) => async (dispatch) => {
   try {
     dispatch(loginStart());
     const result = await axios.post(
-      `${process.env.REACT_APP_API_BASE_URL}/oturum/girisyap`,
+      `${process.env.REACT_APP_API_BASE_URL}/auth/login`,
       user
     );
     if (result.status === 202) {

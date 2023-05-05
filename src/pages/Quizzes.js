@@ -30,7 +30,7 @@ const Quizzes = () => {
 
   useEffect(() => {
     dispatch(changeMenuIndex(4));
-    dispatch(changeTitle("Testler"));
+    dispatch(changeTitle("Quizzes"));
     dispatch(fetchQuizzes());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -50,7 +50,7 @@ const Quizzes = () => {
           <TextField
             value={filterQuery}
             onChange={handleFilterChange}
-            label="Filtrele"
+            label="Filter"
             variant="outlined"
             fullWidth
             className={classes.formElement}

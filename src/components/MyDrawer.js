@@ -92,42 +92,42 @@ const MyDrawer = () => {
           <>
             <ListItem
               button
-              onClick={() => handleListItemClick("/profil")}
+              onClick={() => handleListItemClick("/profile")}
               selected={menuIndex === 0}
             >
               <ListItemIcon>
                 <FaceIcon />
               </ListItemIcon>
-              <ListItemText primary={"Profilim"} />
+              <ListItemText primary={"Profile"} />
             </ListItem>
             <ListItem button onClick={() => dispatch(logout())}>
               <ListItemIcon>
                 <ExitToAppIcon />
               </ListItemIcon>
-              <ListItemText primary={"Çıkış Yap"} />
+              <ListItemText primary={"Logout"} />
             </ListItem>
           </>
         ) : (
           <>
             <ListItem
               button
-              onClick={() => handleListItemClick("/girisyap")}
+              onClick={() => handleListItemClick("/login")}
               selected={menuIndex === 1}
             >
               <ListItemIcon>
                 <EmojiPeopleIcon />
               </ListItemIcon>
-              <ListItemText primary={"Giriş Yap"} />
+              <ListItemText primary={"Log In"} />
             </ListItem>
             <ListItem
               button
-              onClick={() => handleListItemClick("/kayitol")}
+              onClick={() => handleListItemClick("/register")}
               selected={menuIndex === 2}
             >
               <ListItemIcon>
                 <AccessibilityNewIcon />
               </ListItemIcon>
-              <ListItemText primary={"Kayıt Ol"} />
+              <ListItemText primary={"Register"} />
             </ListItem>
           </>
         )}
@@ -142,28 +142,28 @@ const MyDrawer = () => {
           <ListItemIcon>
             <HomeIcon />
           </ListItemIcon>
-          <ListItemText primary={"Anasayfa"} />
+          <ListItemText primary={"Homepage"} />
         </ListItem>
         <ListItem
           button
-          onClick={() => handleListItemClick("/testler")}
+          onClick={() => handleListItemClick("/quizzes")}
           selected={menuIndex === 4}
         >
           <ListItemIcon>
             <SearchIcon />
           </ListItemIcon>
-          <ListItemText primary={"Test Bul"} />
+          <ListItemText primary={"Find a quiz"} />
         </ListItem>
         {isAuthenticated ? (
           <ListItem
             button
-            onClick={() => handleListItemClick("/testler/olustur")}
+            onClick={() => handleListItemClick("/quizzes/create")}
             selected={menuIndex === 5}
           >
             <ListItemIcon>
               <AddCircleIcon />
             </ListItemIcon>
-            <ListItemText primary={"Test Oluştur"} />
+            <ListItemText primary={"Create a quiz"} />
           </ListItem>
         ) : null}
       </List>
@@ -173,7 +173,7 @@ const MyDrawer = () => {
           <ListItemIcon>
             {darkMode ? <MoodIcon /> : <MoodBadIcon />}
           </ListItemIcon>
-          <ListItemText primary={"Karanlık Mod"} />
+          <ListItemText primary={"Dark Mode"} />
           <ListItemSecondaryAction>
             <Switch edge="end" onChange={handleDarkMode} checked={darkMode} />
           </ListItemSecondaryAction>

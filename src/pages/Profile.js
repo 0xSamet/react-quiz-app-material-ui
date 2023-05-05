@@ -38,7 +38,7 @@ const Profile = () => {
 
   useEffect(() => {
     dispatch(changeMenuIndex(0));
-    dispatch(changeTitle("Profilim"));
+    dispatch(changeTitle("My Profile"));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -52,13 +52,13 @@ const Profile = () => {
   const checkInputs = () => {
     let point = 0;
     if (user.name.length === 0) {
-      setNameError("İsim Boş Bırakılamaz");
+      setNameError("Name is required");
     } else {
       setNameError("");
       point++;
     }
     if (user.mail.length === 0) {
-      setMailError("Mail Boş Bırakılamaz");
+      setMailError("E-mail is required");
     } else {
       setMailError("");
       point++;
@@ -82,7 +82,7 @@ const Profile = () => {
       <Grid item s={12} md={8}>
         <form onSubmit={handleSubmit}>
           <Typography variant="h5" gutterBottom align="center">
-            Profilim
+            My Profile
           </Typography>
           <TextField
             value={user.name}
@@ -90,7 +90,7 @@ const Profile = () => {
             helperText={nameError}
             name="name"
             type="text"
-            label="İsim"
+            label="Name"
             variant="outlined"
             fullWidth
             className={classes.formElement}
@@ -103,27 +103,18 @@ const Profile = () => {
             helperText={mailError}
             name="mail"
             type="email"
-            label="Mail"
+            label="E-Mail"
             variant="outlined"
             fullWidth
             className={classes.formElement}
             onChange={handleInputChange}
             disabled
           />
-          {/*DAHA SONRA YAPILACAK // <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            className={classes.formElement}
-            fullWidth
-          >
-            Güncelle
-          </Button>*/}
         </form>
       </Grid>
     </Grid>
   ) : (
-    <Redirect to="/girisyap" />
+    <Redirect to="/login" />
   );
 };
 

@@ -28,11 +28,11 @@ export const register = (user) => async (dispatch) => {
   try {
     dispatch(registerStart());
     const result = await axios.post(
-      `${process.env.REACT_APP_API_BASE_URL}/oturum/kayitol`,
+      `${process.env.REACT_APP_API_BASE_URL}/auth/register`,
       user
     );
     if (result.status === 201) {
-      dispatch(registerSuccess("Kayıt Oldunuz"));
+      dispatch(registerSuccess("You have registered successfully"));
       return;
     }
     //throw new Error()

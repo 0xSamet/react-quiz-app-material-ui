@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 const INITIAL_STATE = {
   isFetching: false,
@@ -47,31 +48,34 @@ export const createFailure = (message) => ({
   },
 });
 
-export const fetchQuizzes = (query = "") => async (dispatch) => {
-  dispatch(fetchStart());
-  try {
-    const result = await axios.get(
-      `${process.env.REACT_APP_API_BASE_URL}/testler`,
-      {
-        params: {
-          q: query,
-        },
+export const fetchQuizzes =
+  (query = "") =>
+  async (dispatch) => {
+    dispatch(fetchStart());
+    try {
+      const result = await axios.get(
+        `${process.env.REACT_APP_API_BASE_URL}/quizzes`,
+        {
+          params: {
+            q: query,
+          },
+        }
+      );
+      if (result.status === 200) {
+        dispatch(fetchSuccess(result.data));
       }
-    );
-    if (result.status === 200) {
-      dispatch(fetchSuccess(result.data));
+      //console.log(result);
+    } catch (err) {
+      console.log(err);
     }
-    //console.log(result);
-  } catch (err) {
-    console.log(err);
-  }
-};
+  };
 
-export const createQuiz = (quiz) => async (dispatch) => {
+export const createQuiz = (quiz, history) => async (dispatch) => {
   dispatch(createStart());
+
   try {
     const result = await axios.post(
-      `${process.env.REACT_APP_API_BASE_URL}/testler`,
+      `${process.env.REACT_APP_API_BASE_URL}/quizzes`,
       quiz,
       {
         headers: {
@@ -79,12 +83,13 @@ export const createQuiz = (quiz) => async (dispatch) => {
         },
       }
     );
+
     if (result.data.message) {
-      dispatch(createFailure(result.data.message));
-      return;
+      return dispatch(createFailure(result.data.message));
     }
-    dispatch(createSuccess("Test Oluşturuldu !"));
-    console.log(result);
+
+    dispatch(createSuccess("The quiz has been created!"));
+    history.push("/quizzes");
   } catch (err) {
     console.log(err);
   }
